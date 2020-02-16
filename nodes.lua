@@ -2,7 +2,7 @@
 More Blocks: node definitions
 
 Copyright (c) 2011-2017 Hugo Locurcio and contributors.
-              2018,2019 Och_Noe 
+              2018-2020 Och_Noe 
 Licensed under the zlib license. See LICENSE.md for more information.
 --]]
 
@@ -84,6 +84,102 @@ local box_slope_third_top = {
 		{-0.5,  0.417,  0.25, 0.5, 0.5  , 0.5},
 	}
 }
+
+local minimal_slopes_defs = {
+        [""] = {
+                mesh = "moreblocks_slope.obj",
+                collision_box = box_slope,
+                selection_box = box_slope,
+
+        },
+        ["_half"] = {
+                mesh = "moreblocks_slope_half.obj",
+                collision_box = box_slope_half,
+                selection_box = box_slope_half,
+        },
+        ["_half_raised"] = {
+                mesh = "moreblocks_slope_half_raised.obj",
+                collision_box = box_slope_half_raised,
+                selection_box = box_slope_half_raised,
+        },
+
+     }
+
+local function register_minimal_shapes(modname, subname, recipeitem, fields)
+   local defs = minimal_slopes_defs
+   local desc = S("%s Slope"):format(fields.description)
+   for alternate, def in pairs(defs) do
+      for k, v in pairs(fields) do
+	 def[k] = v
+      end
+      def.drawtype = "mesh"
+      def.paramtype = "light"
+      def.paramtype2 = def.paramtype2 or "facedir"
+      def.on_place = minetest.rotate_node
+      def.description = desc
+      def.use_texture_alpha = fields.use_texture_alpha
+      def.groups = stairsplus:prepare_groups(fields.groups)
+      if fields.drop and not (type(fields.drop) == "table") then
+	 def.drop = modname.. ":slope_" ..fields.drop..alternate
+      end
+      minetest.register_node(":" ..modname.. ":slope_" ..subname..alternate, def)
+   end
+   
+   
+   minetest.register_craft({
+			      recipe = {
+				 { "","","" },
+				 { "","",recipeitem, },
+				 { "", recipeitem, recipeitem },
+			      },
+			      output = modname .. ":slope_" .. subname
+			   })
+
+   minetest.register_craft({
+			      recipe = {
+				 { "","","" },
+				 { "","","", },
+				 { "", recipeitem, recipeitem },
+			      },
+			      output = modname .. ":slope_" .. subname .. "_half 12"
+			   })
+
+   minetest.register_craft({
+			      recipe = {
+				 { "","",recipeitem, },
+				 { "","","" },
+				 { "", recipeitem, recipeitem },
+			      },
+			      output = modname .. ":slope_" .. subname .. "_half_raised 4"
+			   })
+
+   
+   minetest.register_craft({
+			      type = "shapeless",
+			      output = recipeitem,
+			      recipe =  {modname .. ":slope_" .. subname, modname .. ":slope_" .. subname},
+			   })
+   
+   minetest.register_craft({
+			      type = "shapeless",
+			      output = recipeitem,
+			      recipe =  {modname .. ":slope_" .. subname .. "_half", modname .. ":slope_" .. subname .. "_half_raised"},
+			   })
+   
+
+
+
+
+   -- 100% slope     1 node
+   
+
+   --  50% slope     2 nodes
+
+
+   --  50% slab      1 node
+
+   
+end
 
 
 local nodes = {
@@ -608,6 +704,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -621,6 +718,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -634,6 +732,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -647,6 +746,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -660,6 +760,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -673,6 +774,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -686,6 +788,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -699,6 +802,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -712,6 +816,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -725,6 +830,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -738,6 +844,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -751,6 +858,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -764,6 +872,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -777,6 +886,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -790,6 +900,7 @@ local nodes = {
                 use_texture_alpha = true,
 		paramtype = "light",
                 no_stairs = true,
+		minimal_shapes = true,
 		sunlight_propagates = true,
 		groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3},
 		sounds = sound_glass,
@@ -943,22 +1054,36 @@ for name, def in pairs(nodes) do
 	def.tiles = def.tiles or {"moreblocks_" ..name.. ".png"}
 	minetest.register_node("moreblocks:" ..name, def)
 	minetest.register_alias(name, "moreblocks:" ..name)
+	local groups = {}
+	local temp_tiles = def.tiles
+	if def.one_texture then
+	   temp_tiles = { def.tiles[1]}
+	end
+	for k, v in pairs(def.groups) do groups[k] = v end
 	if not def.no_stairs then
-		local groups = {}
-                temp_tiles = def.tiles
-                if def.one_texture then
-                   temp_tiles = { def.tiles[1]}
-                end
-		for k, v in pairs(def.groups) do groups[k] = v end
-		stairsplus:register_all("moreblocks", name, "moreblocks:" ..name, {
-			description = def.description,
-			groups = groups,
-			tiles = temp_tiles,
-			sunlight_propagates = def.sunlight_propagates,
-			light_source = def.light_source,
-			sounds = def.sounds,
-                        use_texture_alpha = def.use_texture_alpha
-		})
+	   stairsplus:register_all("moreblocks", name, "moreblocks:" ..name, {
+				      description = def.description,
+				      groups = groups,
+				      tiles = temp_tiles,
+				      sunlight_propagates = def.sunlight_propagates,
+				      light_source = def.light_source,
+				      sounds = def.sounds,
+				      use_texture_alpha = def.use_texture_alpha
+				   })
+	else
+	   if def.train_slopes then
+	   end
+	   if def.minimal_shapes then
+	      register_minimal_shapes("moreblocks", name, "moreblocks:" ..name, {
+					 description = def.description,
+					 groups = groups,
+					 tiles = temp_tiles,
+					 sunlight_propagates = def.sunlight_propagates,
+					 light_source = def.light_source,
+					 sounds = def.sounds,
+					 use_texture_alpha = def.use_texture_alpha
+				      })
+	   end
 	end
 end
 
@@ -974,17 +1099,5 @@ minetest.register_craftitem("moreblocks:nothing", {
 	inventory_image = "invisible.png",
 	on_use = function() end,
 })
-
-
-
-
-
-
-
-
-
-
-
-
 
 
