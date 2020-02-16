@@ -105,8 +105,26 @@ local minimal_slopes_defs = {
 
      }
 
+
+local function copytable(orig)
+        local orig_type = type(orig)
+        local copy
+        if orig_type == 'table' then
+                copy = {}
+                for orig_key, orig_value in next, orig, nil do
+                        copy[copytable(orig_key)] = copytable(orig_value)
+                end
+                setmetatable(copy, copytable(getmetatable(orig)))
+        else
+                copy = orig
+        end
+        return copy
+end
+
+
+
 local function register_minimal_shapes(modname, subname, recipeitem, fields)
-   local defs = minimal_slopes_defs
+   local defs = copytable(minimal_slopes_defs)
    local desc = S("%s Slope"):format(fields.description)
    for alternate, def in pairs(defs) do
       for k, v in pairs(fields) do
@@ -118,7 +136,7 @@ local function register_minimal_shapes(modname, subname, recipeitem, fields)
       def.on_place = minetest.rotate_node
       def.description = desc
       def.use_texture_alpha = fields.use_texture_alpha
-      def.groups = stairsplus:prepare_groups(fields.groups)
+      def.groups = def.groups -- stairsplus:prepare_groups(fields.groups)
       if fields.drop and not (type(fields.drop) == "table") then
 	 def.drop = modname.. ":slope_" ..fields.drop..alternate
       end
