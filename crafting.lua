@@ -196,6 +196,15 @@ minetest.register_craft({
 	}
 })
 
+-- added 2020-04-27 - requested by ywang
+minetest.register_craft({
+	output = "moreblocks:stone_tile 36",
+	recipe = {
+		{"moreblocks:cobble_compressed", "moreblocks:cobble_compressed"},
+		{"moreblocks:cobble_compressed", "moreblocks:cobble_compressed"},
+	}
+})
+
 minetest.register_craft({
 	output = "moreblocks:split_stone_tile",
 	recipe = {
