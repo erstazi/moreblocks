@@ -428,6 +428,12 @@ minetest.register_craft({
 	recipe = {"default:glass", "default:glass", "default:glass",
 	          "default:torch", "dye:white"},
 })
+minetest.register_craft({
+	output = "moreblocks:bright_glow_glass 2",
+	type = "shapeless",
+	recipe = {"default:glass", "default:glass", "dye:white",
+	          "default:torch", "default:torch", "default:torch"   },
+})
 
 minetest.register_craft({
 	output = "moreblocks:low_glow_glass 2",
