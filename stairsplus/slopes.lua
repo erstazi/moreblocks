@@ -113,6 +113,7 @@ local box_slope_outer_half_raised = {
 -- Node will be called <modname>:slope_<subname>
 
 function register_slope(modname, subname, recipeitem, groups, images, description, drop, light)
+	local use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or true
 	stairsplus:register_slope(modname, subname, recipeitem, {
 		groups = groups,
 		tiles = images,
@@ -120,7 +121,7 @@ function register_slope(modname, subname, recipeitem, groups, images, descriptio
 		drop = drop,
 		light_source = light,
 		sounds = default.node_sound_stone_defaults(),
-                use_texture_alpha = use_texture_alpha
+		use_texture_alpha = use_texture_alpha
 	})
 end
 
@@ -241,6 +242,7 @@ end
 function stairsplus:register_slope(modname, subname, recipeitem, fields)
 	local defs = stairsplus.copytable(slopes_defs)
 	local desc = S("%s Slope"):format(fields.description)
+	local use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or fields.use_texture_alpha
 	for alternate, def in pairs(defs) do
 		for k, v in pairs(fields) do
 			def[k] = v
@@ -248,9 +250,9 @@ function stairsplus:register_slope(modname, subname, recipeitem, fields)
 		def.drawtype = "mesh"
 		def.paramtype = "light"
 		def.paramtype2 = def.paramtype2 or "facedir"
+		def.use_texture_alpha = use_texture_alpha
 		def.on_place = minetest.rotate_node
 		def.description = desc
-                def.use_texture_alpha = fields.use_texture_alpha
 		def.groups = stairsplus:prepare_groups(fields.groups)
 		if alternate == "_half" or alternate == "_half_raised" then
 		   def.groups.not_blocking_trains = 1

@@ -24,6 +24,8 @@ local function tile_tiles(name)
 	return {tex, tex, tex, tex, tex.. "^[transformR90", tex.. "^[transformR90"}
 end
 
+local use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or true
+
 local box_slope = {
 	type = "fixed",
 	fixed = {
@@ -126,6 +128,7 @@ end
 local function register_minimal_shapes(modname, subname, recipeitem, fields)
    local defs = copytable(minimal_slopes_defs)
    local desc = S("%s Slope"):format(fields.description)
+   local use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or fields.use_texture_alpha
    for alternate, def in pairs(defs) do
       for k, v in pairs(fields) do
 	 def[k] = v
@@ -135,7 +138,7 @@ local function register_minimal_shapes(modname, subname, recipeitem, fields)
       def.paramtype2 = def.paramtype2 or "facedir"
       def.on_place = minetest.rotate_node
       def.description = desc
-      def.use_texture_alpha = fields.use_texture_alpha
+      def.use_texture_alpha = use_texture_alpha
       def.groups = def.groups -- stairsplus:prepare_groups(fields.groups)
       if fields.drop and not (type(fields.drop) == "table") then
 	 def.drop = modname.. ":slope_" ..fields.drop..alternate
@@ -564,7 +567,7 @@ local nodes = {
 		tiles = {"moreblocks_dim_glow_glass.png"},
 		-- tiles = {"default_glass.png^[colorize:#FFFF78"},
                 one_texture = true,                
-		use_texture_alpha = true,
+		use_texture_alpha = use_texture_alpha,
 		paramtype = "light",
 		sunlight_propagates = true,
 		light_source = 5,
@@ -577,7 +580,7 @@ local nodes = {
 		tiles = {"moreblocks_dim_glow_glass.png"},
 		-- tiles = {"default_glass.png^[colorize:#FFFF78"},
                 one_texture = true,                
-		use_texture_alpha = true,
+		use_texture_alpha = use_texture_alpha,
 		paramtype = "light",
 		sunlight_propagates = true,
 		light_source = 12,
@@ -590,7 +593,7 @@ local nodes = {
 		tiles = {"moreblocks_low_glow_glass.png"},
 		-- tiles = {"default_glass.png^[colorize:#FFFF78"},
                 one_texture = true,                
-		use_texture_alpha = true,
+		use_texture_alpha = use_texture_alpha,
 		paramtype = "light",
 		sunlight_propagates = true,
 		light_source = 8,
@@ -802,7 +805,7 @@ for _,f in pairs(tinted_glass_1) do
    neu.drawtype = "glasslike_framed_optional"
    neu.tiles = t_name
    neu.one_texture = true
-   neu.use_texture_alpha = true
+   neu.use_texture_alpha = use_texture_alpha
    neu.paramtype = "light"
    neu.sunlight_propagates = true
    neu.groups = {snappy = 2, cracky = 3, oddly_breakable_by_hand = 3}
@@ -841,6 +844,7 @@ for name, def in pairs(nodes) do
 	   temp_tiles = { def.tiles[1]}
 	end
 	for k, v in pairs(def.groups) do groups[k] = v end
+	local use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or def.use_texture_alpha
 	if not def.no_stairs then
 	   stairsplus:register_all("moreblocks", name, "moreblocks:" ..name, {
 				      description = def.description,
@@ -849,7 +853,7 @@ for name, def in pairs(nodes) do
 				      sunlight_propagates = def.sunlight_propagates,
 				      light_source = def.light_source,
 				      sounds = def.sounds,
-				      use_texture_alpha = def.use_texture_alpha
+				      use_texture_alpha = use_texture_alpha
 				   })
 	else
 	   if def.train_slopes then
@@ -862,7 +866,7 @@ for name, def in pairs(nodes) do
 					 sunlight_propagates = def.sunlight_propagates,
 					 light_source = def.light_source,
 					 sounds = def.sounds,
-					 use_texture_alpha = def.use_texture_alpha
+					 use_texture_alpha = use_texture_alpha
 				      })
 	   end
 	end

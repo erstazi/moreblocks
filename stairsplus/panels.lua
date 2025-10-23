@@ -86,6 +86,7 @@ end
 function stairsplus:register_panel(modname, subname, recipeitem, fields)
 	local defs = stairsplus.copytable(panels_defs)
 	local desc = S("%s Panel"):format(fields.description)
+	local use_texture_alpha = minetest.features.use_texture_alpha_string_modes and "blend" or fields.use_texture_alpha
 	for alternate, def in pairs(defs) do
 		for k, v in pairs(fields) do
 			def[k] = v
@@ -93,6 +94,7 @@ function stairsplus:register_panel(modname, subname, recipeitem, fields)
 		def.drawtype = "nodebox"
 		def.paramtype = "light"
 		def.paramtype2 = def.paramtype2 or "facedir"
+		def.use_texture_alpha = use_texture_alpha
 		def.on_place = minetest.rotate_node
 		def.description = desc
 		def.groups = stairsplus:prepare_groups(fields.groups)
